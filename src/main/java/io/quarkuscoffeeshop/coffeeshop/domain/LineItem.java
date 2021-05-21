@@ -2,34 +2,26 @@ package io.quarkuscoffeeshop.coffeeshop.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-import javax.persistence.*;
+import org.infinispan.protostream.annotations.ProtoField;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @JsonIgnoreProperties(value = { "orderId" })
-@Entity
-@Table(name = "items")
-public class LineItem extends PanacheEntityBase {
+public class LineItem {
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id", nullable = false)
     Order order;
 
-    @Id
-    @Column(nullable = false, unique = true)
     private String itemId;
 
-    @Enumerated(EnumType.STRING)
     private Item item;
 
     private String name;
 
     private BigDecimal price;
 
-    @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 
     public LineItem(Item item, String name, BigDecimal price, ItemStatus itemStatus, Order order) {
@@ -47,7 +39,7 @@ public class LineItem extends PanacheEntityBase {
     @Override
     public String toString() {
         return "LineItem{" +
-                "order=" + order.getOrderId() +
+                "order=" + (order != null ? order.getOrderId() : "") +
                 ", itemId='" + itemId + '\'' +
                 ", item=" + item +
                 ", name='" + name + '\'' +
@@ -90,6 +82,7 @@ public class LineItem extends PanacheEntityBase {
         this.order = order;
     }
 
+    @ProtoField(number = 1)
     public String getItemId() {
         return itemId;
     }
@@ -98,6 +91,7 @@ public class LineItem extends PanacheEntityBase {
         this.itemId = itemId;
     }
 
+    @ProtoField(number = 2)
     public Item getItem() {
         return item;
     }
@@ -106,6 +100,7 @@ public class LineItem extends PanacheEntityBase {
         this.item = item;
     }
 
+    @ProtoField(number = 3)
     public String getName() {
         return name;
     }
@@ -114,6 +109,7 @@ public class LineItem extends PanacheEntityBase {
         this.name = name;
     }
 
+    @ProtoField(number = 4)
     public BigDecimal getPrice() {
         return price;
     }
@@ -122,6 +118,7 @@ public class LineItem extends PanacheEntityBase {
         this.price = price;
     }
 
+    @ProtoField(number = 5)
     public ItemStatus getItemStatus() {
         return itemStatus;
     }

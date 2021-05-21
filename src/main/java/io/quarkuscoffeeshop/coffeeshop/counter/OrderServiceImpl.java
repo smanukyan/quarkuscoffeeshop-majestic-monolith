@@ -35,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
     @Inject
     OrderRepository orderRepository;
 
-    @Transactional
     public void onOrderIn(final PlaceOrderCommand placeOrderCommand) {
         LOGGER.debug("PlaceOrderCommand received: {}", placeOrderCommand);
         OrderEventResult orderEventResult = Order.from(placeOrderCommand);

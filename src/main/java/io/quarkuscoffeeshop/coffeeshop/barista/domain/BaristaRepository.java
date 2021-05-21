@@ -1,17 +1,21 @@
 package io.quarkuscoffeeshop.coffeeshop.barista.domain;
 
-import io.agroal.api.AgroalDataSource;
-import io.quarkus.agroal.DataSource;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.infinispan.client.Remote;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.infinispan.client.hotrod.RemoteCache;
+
 @ApplicationScoped
-public class BaristaRepository implements PanacheRepository<BaristaItem> {
+public class BaristaRepository {
 
     @Inject
-    @DataSource("barista")
-    AgroalDataSource baristaDatasource;
+    @Remote("local")
+    RemoteCache<String, BaristaItem> cache;
+
+    public void persist(BaristaItem baristaItem) {
+        cache.put(baristaItem.getItem(), baristaItem);
+    }
 
 }

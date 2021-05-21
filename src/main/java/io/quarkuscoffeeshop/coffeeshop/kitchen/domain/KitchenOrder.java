@@ -1,29 +1,23 @@
 package io.quarkuscoffeeshop.coffeeshop.kitchen.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkuscoffeeshop.coffeeshop.domain.Item;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
 import java.time.Instant;
 
-@Entity @Table(name = "kitchen_order", schema = "kitchen")
-public class KitchenOrder extends PanacheEntity {
+import org.infinispan.protostream.annotations.ProtoField;
+
+public class KitchenOrder {
 
     private String orderId;
-
-    @Enumerated(EnumType.STRING)
+  
     private Item item;
-
+    
     private Instant timeIn;
-
+    
     private Instant timeUp;
 
     public KitchenOrder() {
     }
-
 
     public KitchenOrder(String orderId, Item item, Instant timeIn) {
         this.orderId = orderId;
@@ -71,6 +65,7 @@ public class KitchenOrder extends PanacheEntity {
         return result;
     }
 
+    @ProtoField(number = 1)
     public String getOrderId() {
         return orderId;
     }
@@ -79,6 +74,7 @@ public class KitchenOrder extends PanacheEntity {
         this.orderId = orderId;
     }
 
+    @ProtoField(number = 2)
     public Item getItem() {
         return item;
     }
@@ -87,6 +83,7 @@ public class KitchenOrder extends PanacheEntity {
         this.item = item;
     }
 
+    @ProtoField(number = 3)
     public Instant getTimeIn() {
         return timeIn;
     }
@@ -95,6 +92,7 @@ public class KitchenOrder extends PanacheEntity {
         this.timeIn = timeIn;
     }
 
+    @ProtoField(number = 4)
     public Instant getTimeUp() {
         return timeUp;
     }

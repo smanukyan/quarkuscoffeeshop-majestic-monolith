@@ -1,6 +1,12 @@
 package io.quarkuscoffeeshop.coffeeshop.domain;
 
-public enum Location {
+import org.infinispan.protostream.annotations.ProtoEnumValue;
 
-    ATLANTA, CHARLOTTE, RALEIGH;
+public enum Location {
+    @ProtoEnumValue(number = 1, name = "ATLANTA")
+    ATLANTA, 
+    @ProtoEnumValue(number = 2, name = "CHARLOTTE")
+    CHARLOTTE, 
+    @ProtoEnumValue(number = 3, name = "RALEIGH")
+    RALEIGH;
 }

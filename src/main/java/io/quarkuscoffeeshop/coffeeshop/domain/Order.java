@@ -1,16 +1,16 @@
 package io.quarkuscoffeeshop.coffeeshop.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkuscoffeeshop.coffeeshop.counter.domain.OrderEventResult;
 import io.quarkuscoffeeshop.coffeeshop.domain.commands.PlaceOrderCommand;
 import io.quarkuscoffeeshop.coffeeshop.domain.valueobjects.OrderIn;
 import io.quarkuscoffeeshop.coffeeshop.domain.valueobjects.OrderUp;
 import io.quarkuscoffeeshop.coffeeshop.domain.valueobjects.OrderUpdate;
 import io.smallrye.mutiny.Uni;
+
+import org.infinispan.protostream.annotations.ProtoField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,38 +18,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Entity
-@Table(name = "Orders")
-public class Order extends PanacheEntityBase {
+public class Order {
 
-    @Transient
     static Logger LOGGER = LoggerFactory.getLogger(Order.class);
 
-    @Id
-    @Column(nullable = false, unique = true, name = "order_id")
     private String orderId;
 
-    @Enumerated(EnumType.STRING)
     private OrderSource orderSource;
 
     private String loyaltyMemberId;
 
     private Instant timestamp;
 
-    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @Enumerated(EnumType.STRING)
     private Location location;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
     private List<LineItem> baristaLineItems;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
     private List<LineItem> kitchenLineItems;
 
     protected Order() {
-
     }
 
     private Order(String orderId) {
@@ -60,6 +49,7 @@ public class Order extends PanacheEntityBase {
     public static Uni<OrderEventResult> fromAsync(final PlaceOrderCommand placeOrderCommand) {
         return Uni.createFrom().item(from(placeOrderCommand));
     }
+
     /**
      * Creates a new Order and corresponding updates from a PlaceOrderCommand
      *
@@ -68,7 +58,6 @@ public class Order extends PanacheEntityBase {
      * @see OrderEventResult
      */
     public static OrderEventResult from(final PlaceOrderCommand placeOrderCommand) {
-
 
         // build the order from the PlaceOrderCommand
         Order order = new Order(placeOrderCommand.getId());
@@ -202,12 +191,12 @@ public class Order extends PanacheEntityBase {
         this.kitchenLineItems.add(lineItem);
     }
 
-
     /**
      * Not all Orders come from Loyalty Members so this returns an Optional<String> of the Loyalty Member's Id
      *
      * @return Optional<String>
      */
+    @ProtoField(number = 3)
     public Optional<String> getLoyaltyMemberId() {
         return Optional.ofNullable(loyaltyMemberId);
     }
@@ -217,6 +206,7 @@ public class Order extends PanacheEntityBase {
      *
      * @return Optional<String>
      */
+    @ProtoField(number = 7)
     public Optional<List<LineItem>> getBaristaLineItems() {
         return Optional.ofNullable(baristaLineItems);
     }
@@ -226,6 +216,7 @@ public class Order extends PanacheEntityBase {
      *
      * @return Optional<String>
      */
+    @ProtoField(number = 8)
     public Optional<List<LineItem>> getKitchenLineItems() {
         return Optional.ofNullable(kitchenLineItems);
     }
@@ -288,6 +279,7 @@ public class Order extends PanacheEntityBase {
         return result;
     }
 
+    @ProtoField(number = 1)
     public String getOrderId() {
         return orderId;
     }
@@ -296,6 +288,7 @@ public class Order extends PanacheEntityBase {
         this.orderId = orderId;
     }
 
+    @ProtoField(number = 2)
     public OrderSource getOrderSource() {
         return orderSource;
     }
@@ -308,6 +301,7 @@ public class Order extends PanacheEntityBase {
         this.loyaltyMemberId = loyaltyMemberId;
     }
 
+    @ProtoField(number = 4)
     public Instant getTimestamp() {
         return timestamp;
     }
@@ -316,6 +310,7 @@ public class Order extends PanacheEntityBase {
         this.timestamp = timestamp;
     }
 
+    @ProtoField(number = 5)
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
@@ -324,6 +319,7 @@ public class Order extends PanacheEntityBase {
         this.orderStatus = orderStatus;
     }
 
+    @ProtoField(number = 6)
     public Location getLocation() {
         return location;
     }

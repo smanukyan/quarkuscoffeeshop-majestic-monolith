@@ -1,13 +1,10 @@
 package io.quarkuscoffeeshop.coffeeshop.barista.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.Instant;
 
-@Entity @Table(name = "barista_order", schema = "barista")
-public class BaristaItem extends PanacheEntity {
+import org.infinispan.protostream.annotations.ProtoField;
+
+public class BaristaItem {
 
     private String item;
 
@@ -54,6 +51,7 @@ public class BaristaItem extends PanacheEntity {
         return result;
     }
 
+    @ProtoField(number = 1)
     public String getItem() {
         return item;
     }
@@ -62,6 +60,7 @@ public class BaristaItem extends PanacheEntity {
         this.item = item;
     }
 
+    @ProtoField(number = 2)
     public Instant getTimeIn() {
         return timeIn;
     }
@@ -70,6 +69,7 @@ public class BaristaItem extends PanacheEntity {
         this.timeIn = timeIn;
     }
 
+    @ProtoField(number = 3)
     public Instant getTimeUp() {
         return timeUp;
     }
